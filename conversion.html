@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multi-Converter</title>
+  <style>
+    .clock {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Clock -->
+  <div class="clock" id="clock"></div>
+
+  <!-- Gallons to Ounces Converter -->
+  <div class="container">
+    <h2>Gallons to Ounces Converter</h2>
+    <input type="number" id="gallonInput" placeholder="Enter gallons" />
+    <button onclick="convert()">Convert</button>
+    <p id="gallonToOunceResult"></p>
+  </div>
+
+  <!-- Gallons to Cans Calculator -->
+  <div class="container">
+    <h2>Gallons to Can Calculator</h2>
+    <input type="number" id="gallons" placeholder="Enter gallons" step="any" />
+    <br>
+    <input type="number" id="canSize" placeholder="Ounces per can" step="any" />
+    <button onclick="calculateCans()">Calculate</button>
+    <div id="gallonsToCansResult"></div>
+  </div>
+
+  <!-- Timelapse to Can-Cut -->
+  <div class="container">
+    <h2>Timelapse to Can-Cut</h2>
+    <input type="number" id="canPerMinute" placeholder="Enter CPM" step="any" />
+    <br>
+    <input type="number" id="numberOfCansMax" placeholder="Number of Cans (Max)" step="any" />
+    <button onclick="calculateTimelapse()">Timelapse</button>
+    <div id="timelapseResult"></div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const time = now.toLocaleTimeString();
+      const date = now.toLocaleDateString();
+      document.getElementById("clock").textContent = `Current Time: ${date} ${time}`;
+    }
+
+    // Start clock immediately and update every second
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    function convert() {
+      const gal = parseFloat(document.getElementById("gallonInput").value);
+      if (isNaN(gal)) {
+        document.getElementById("gallonToOunceResult").textContent = "Please enter a valid number.";
+        return;
+      }
+      const oz = gal * 128;
+      document.getElementById("gallonToOunceResult").textContent = `${gal} gallons = ${oz} ounces`;
+    }
+
+    function calculateCans() {
+      const gallons = parseFloat(document.getElementById("gallons").value);
+      const canSize = parseFloat(document.getElementById("canSize").value);
+
+      if (isNaN(gallons) || isNaN(canSize) || canSize <= 0) {
+        document.getElementById("gallonsToCansResult").textContent = "Please enter valid values.";
+        return;
+      }
+
+      const totalOunces = gallons * 128;
+      const cansNeeded = Math.ceil(totalOunces / canSize);
+      document.getElementById("gallonsToCansResult").textContent =
+        `${gallons} gallons = ${totalOunces} oz → You need ${cansNeeded} can(s) of ${canSize} oz`;
+    }
+
+    function calculateTimelapse() {
+      const canPerMinute = parseFloat(document.getElementById("canPerMinute").value);
+      const numberOfCansMax = parseFloat(document.getElementById("numberOfCansMax").value);
+
+      if (isNaN(canPerMinute) || isNaN(numberOfCansMax) || canPerMinute <= 0) {
+        document.getElementById("timelapseResult").textContent = "Please enter valid values.";
+        return;
+      }
+
+      const timeInMinutes = Math.ceil(numberOfCansMax / canPerMinute);
+      document.getElementById("timelapseResult").textContent =
+        `${numberOfCansMax} can(s) at ${canPerMinute} CPM will take about ${timeInMinutes} minute(s)`;
+    }
+  </script>
+</body>
+</html>
